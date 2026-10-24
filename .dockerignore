@@ -1,0 +1,60 @@
+cd "F:\takehome assignment\wind-forecast-portal"
+
+git init
+git branch -M main
+git remote add origin https://github.com/OWNER/REPO.git
+git status --short
+
+function Commit-Paths {
+    param([string]$Message, [string[]]$Paths)
+
+    git add -- $Paths
+    if ($LASTEXITCODE -ne 0) { throw "git add failed: $Message" }
+
+    git diff --cached --quiet
+    if ($LASTEXITCODE -eq 0) { throw "No staged changes for: $Message" }
+
+    git commit -m $Message
+    if ($LASTEXITCODE -ne 0) { throw "git commit failed: $Message" }
+}
+
+Commit-Paths "Add project overview" @(".\README.md")
+Commit-Paths "Document system architecture" @(".\docs\architecture.md")
+Commit-Paths "Document API verification" @(".\docs\api-verification.md")
+Commit-Paths "Add build status and demo guide" @(".\docs\build-status.md", ".\docs\demo-script.md")
+Commit-Paths "Add environment example" @(".\.env.example")
+Commit-Paths "Add project commands and pytest config" @(".\Makefile", ".\pytest.ini")
+Commit-Paths "Add root Dockerfile" @(".\Dockerfile")
+Commit-Paths "Add backend Dockerfile" @(".\backend\Dockerfile")
+Commit-Paths "Add local and Heroku deployment config" @(".\docker-compose.yml", ".\heroku.yml")
+Commit-Paths "Add backend dependencies" @(".\backend\requirements.txt", ".\backend\requirements-dev.txt")
+Commit-Paths "Add backend configuration" @(".\backend\app\__init__.py", ".\backend\app\config.py")
+Commit-Paths "Add API schemas" @(".\backend\app\schemas.py")
+Commit-Paths "Add Elexon client package" @(".\backend\app\clients\__init__.py")
+Commit-Paths "Implement Elexon client" @(".\backend\app\clients\elexon.py")
+Commit-Paths "Add backend services package" @(".\backend\app\services\__init__.py")
+Commit-Paths "Implement selection service" @(".\backend\app\services\selection.py")
+Commit-Paths "Implement metrics service" @(".\backend\app\services\metrics.py")
+Commit-Paths "Implement forecast data service" @(".\backend\app\services\data_service.py")
+Commit-Paths "Add backend API entry point" @(".\backend\app\main.py")
+Commit-Paths "Test Elexon client" @(".\backend\tests\test_elexon_client.py")
+Commit-Paths "Test selection service" @(".\backend\tests\test_selection.py")
+Commit-Paths "Test metrics service" @(".\backend\tests\test_metrics.py")
+Commit-Paths "Test data service" @(".\backend\tests\test_data_service.py")
+Commit-Paths "Test backend API" @(".\backend\tests\test_api.py")
+Commit-Paths "Add Elexon verification script" @(".\scripts\verify_elexon.py")
+Commit-Paths "Add frontend package and HTML entry" @(".\frontend\package.json", ".\frontend\index.html")
+Commit-Paths "Add Vite configuration" @(".\frontend\vite.config.ts")
+Commit-Paths "Add frontend styling and TypeScript config" @(".\frontend\postcss.config.js", ".\frontend\tailwind.config.js", ".\frontend\tsconfig.json")
+Commit-Paths "Add frontend API and formatting helpers" @(".\frontend\src\api.ts", ".\frontend\src\format.ts")
+Commit-Paths "Add frontend application" @(".\frontend\src")
+
+git log -30 --oneline
+git status --short
+git push -u origin main.git
+.env
+**/node_modules
+**/dist
+**/__pycache__
+**/.pytest_cache
+**/.venv
